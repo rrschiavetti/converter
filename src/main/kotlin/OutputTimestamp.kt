@@ -34,9 +34,9 @@ internal class OutputTimestamp(private val shortForm: Boolean, private val ignor
      fun getOutputTimestamp(hours: Long? = null, minutes: Long? = null, seconds: Long? = null): String {
         val parts = mutableListOf<String>()
 
-        addUnitIfNeeded(parts, hours, if(shortForm) SHORT_HOUR else if(hours == 1L) SINGULAR_HOUR else PLURAL_HOUR)
-        addUnitIfNeeded(parts, minutes, if(shortForm) SHORT_MINUTE else if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE)
-        addUnitIfNeeded(parts, seconds, if(shortForm) SHORT_SECOND else if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND)
+        addPart(parts, hours, if(shortForm) SHORT_HOUR else if(hours == 1L) SINGULAR_HOUR else PLURAL_HOUR)
+        addPart(parts, minutes, if(shortForm) SHORT_MINUTE else if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE)
+        addPart(parts, seconds, if(shortForm) SHORT_SECOND else if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND)
 
         return parts.joinToString(" ").trim()
     }
@@ -49,7 +49,7 @@ internal class OutputTimestamp(private val shortForm: Boolean, private val ignor
      * @param unit unit of the time
      * @return A string appropriate units like "2 hours"
      */
-    private fun addUnitIfNeeded(parts: MutableList<String>, value: Long?, unit: String) {
+    private fun addPart(parts: MutableList<String>, value: Long?, unit: String) {
         value?.let {
             if (value > 0 || !ignoreZero) {
                 val formattedValue = if (shortForm) "$value$unit" else "$value $unit"

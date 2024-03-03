@@ -7,8 +7,8 @@
 class ConverterImpl(
      private val enableMinutes: Boolean = false,
      private val enableHours: Boolean = false,
-     private val ignoreZero: Boolean = false,
-     private val shortForm: Boolean = false
+     ignoreZero: Boolean = false,
+     shortForm: Boolean = false
 ): Converter {
 
     private val outputTimestamp = OutputTimestamp(shortForm, ignoreZero)
@@ -28,9 +28,18 @@ class ConverterImpl(
         val totalSeconds = millisecondsLong / 1000
 
         return when {
-            enableHours -> outputTimestamp.getOutputTimestamp(seconds = (totalSeconds % 60) % 60, minutes = (totalSeconds % 3600) / 60, hours =  totalSeconds / 3600)
-            enableMinutes -> outputTimestamp.getOutputTimestamp(seconds = totalSeconds % 60, minutes = totalSeconds / 60)
-            else -> outputTimestamp.getOutputTimestamp(seconds = totalSeconds)
+            enableHours -> outputTimestamp.getOutputTimestamp(
+                seconds = (totalSeconds % 60) % 60,
+                minutes = (totalSeconds % 3600) / 60,
+                hours =  totalSeconds / 3600
+            )
+            enableMinutes -> outputTimestamp.getOutputTimestamp(
+                seconds = totalSeconds % 60,
+                minutes = totalSeconds / 60
+            )
+            else -> outputTimestamp.getOutputTimestamp(
+                seconds = totalSeconds
+            )
         }
     }
 

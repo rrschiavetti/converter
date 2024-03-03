@@ -6,7 +6,8 @@
 class ConverterImpl(
      private val enableMinutes: Boolean = false,
      private val enableHours: Boolean = false,
-     private val ignoreZero: Boolean = false
+     private val ignoreZero: Boolean = false,
+     private val shortForm: Boolean = false
 ): Converter {
 
     private companion object {
@@ -14,14 +15,20 @@ class ConverterImpl(
         const val SINGULAR_SECOND = "second"
         /** Text for plural SECOND unit */
         const val PLURAL_SECOND = "seconds"
+        /** Text for SHORT SECOND unit */
+        const val SHORT_SECOND = "s"
         /** Text for singular MINUTE unit */
         const val SINGULAR_MINUTE = "minute"
         /** Text for plural MINUTE unit */
         const val PLURAL_MINUTE = "minutes"
+        /** Text for SHORT MINUTE unit */
+        const val SHORT_MINUTE = "m"
         /** Text for singular HOUR unit */
         const val SINGULAR_HOUR = "hour"
         /** Text for plural HOUR unit */
         const val PLURAL_HOUR = "hours"
+        /** Text for SHORT HOUR unit */
+        const val SHORT_HOUR = "h"
     }
 
     /**
@@ -60,13 +67,18 @@ class ConverterImpl(
      * @sample 10 -> "10 seconds"
      */
     private fun getOutputTimestamp(seconds: Long): String {
-        if (ignoreZero && seconds == 0L) {
-            return ""
-        } else{
-            val unit = if (seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
-            return "$seconds $unit"
+        val parts = mutableListOf<String>()
+
+        val secondsUnit = if(shortForm) SHORT_SECOND else if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
+        if (ignoreZero && seconds > 0L || !ignoreZero) {
+            if(shortForm){
+                parts.add("$seconds$secondsUnit")
+            } else {
+                parts.add("$seconds $secondsUnit")
+            }
         }
 
+        return parts.joinToString(" ").trim()
     }
 
     /**
@@ -78,15 +90,25 @@ class ConverterImpl(
      */
     private fun getOutputTimestamp(seconds: Long, minutes: Long): String {
         val parts = mutableListOf<String>()
-        val secondsUnit = if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
-        val minutesUnit = if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE
 
-        if ((ignoreZero && minutes > 0L) || !ignoreZero) {
-            parts.add("$minutes $minutesUnit")
+        val minutesUnit = if(shortForm) SHORT_MINUTE else if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE
+        if (ignoreZero && minutes > 0L || !ignoreZero) {
+            if(shortForm){
+                parts.add("$minutes$minutesUnit")
+            } else {
+                parts.add("$minutes $minutesUnit")
+            }
         }
-        if ((ignoreZero && seconds > 0L )|| !ignoreZero) {
-            parts.add("$seconds $secondsUnit")
+
+        val secondsUnit = if(shortForm) SHORT_SECOND else if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
+        if (ignoreZero && seconds > 0L || !ignoreZero) {
+            if(shortForm){
+                parts.add("$seconds$secondsUnit")
+            } else {
+                parts.add("$seconds $secondsUnit")
+            }
         }
+
         return parts.joinToString(" ").trim()
     }
 
@@ -100,20 +122,32 @@ class ConverterImpl(
      */
     private fun getOutputTimestamp(seconds: Long, minutes: Long, hours: Long): String {
         val parts = mutableListOf<String>()
-        val secondsUnit = if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
-        val minutesUnit = if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE
-        val hoursUnit = if(hours == 1L) SINGULAR_HOUR else PLURAL_HOUR
 
-        if ((ignoreZero && hours > 0L) || !ignoreZero) {
-            parts.add("$hours $hoursUnit")
+        val hoursUnit = if(shortForm) SHORT_HOUR else if(hours == 1L) SINGULAR_HOUR else PLURAL_HOUR
+        if (ignoreZero && hours > 0L || !ignoreZero) {
+            if(shortForm){
+                parts.add("$hours$hoursUnit")
+            } else {
+                parts.add("$hours $hoursUnit")
+            }
         }
 
-        if ((ignoreZero && minutes > 0L) || !ignoreZero) {
-            parts.add("$minutes $minutesUnit")
+        val minutesUnit = if(shortForm) SHORT_MINUTE else if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE
+        if (ignoreZero && minutes > 0L || !ignoreZero) {
+            if(shortForm){
+                parts.add("$minutes$minutesUnit")
+            } else {
+                parts.add("$minutes $minutesUnit")
+            }
         }
 
-        if ((ignoreZero && seconds > 0L )|| !ignoreZero) {
-            parts.add("$seconds $secondsUnit")
+        val secondsUnit = if(shortForm) SHORT_SECOND else if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
+        if (ignoreZero && seconds > 0L || !ignoreZero) {
+            if(shortForm){
+                parts.add("$seconds$secondsUnit")
+            } else {
+                parts.add("$seconds $secondsUnit")
+            }
         }
 
         return parts.joinToString(" ").trim()

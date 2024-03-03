@@ -1,7 +1,9 @@
 /**
  * This class represents a Converter that converts milliseconds representation in String into seconds timestamp.
  */
-class ConverterImpl: Converter {
+class ConverterImpl(
+    val enableMinutes: Boolean = false
+): Converter {
 
     private companion object {
         /** Text for singular unit */
@@ -21,11 +23,17 @@ class ConverterImpl: Converter {
     override fun convert(milliseconds: String): String {
         validateInput(milliseconds)
 
-        val millisecondsInt: Long = milliseconds.toLong()
+        val millisecondsLong: Long = milliseconds.toLong()
 
-        val result = millisecondsInt / 1000
-
-        return getOutputTimestamp(result)
+        if (!enableMinutes) {
+            val seconds = millisecondsLong / 1000
+            return getOutputTimestamp(seconds)
+        } else {
+            val seconds = millisecondsLong / 1000
+            val minutes = seconds /60
+            val remainingSeconds = seconds % 60
+            return getOutputTimestamp(remainingSeconds, minutes)
+        }
     }
 
     /**
@@ -38,6 +46,10 @@ class ConverterImpl: Converter {
     private fun getOutputTimestamp(seconds: Long): String {
         val unit = if (seconds == 1L) SINGULAR else PLURAL
         return "$seconds $unit"
+    }
+
+    private fun getOutputTimestamp(seconds: Long, minutes: Long): String {
+        return "$minutes minutes and $seconds seconds"
     }
 
     /**

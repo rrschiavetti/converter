@@ -11,11 +11,11 @@ class Converter {
             throw InputIsNotAValidNumberException("Provided milliseconds must be a valid number greater than zero and less than ${Long.MAX_VALUE}")
         }
 
-        val millisecondsInt: Int = milliseconds.toInt()
+        val millisecondsInt: Long = milliseconds.toLong()
 
         val result = millisecondsInt / 1000
 
-        return if (result == 1) result.toString() + " second" else result.toString() + " seconds"
+        return if (result == 1L) result.toString() + " second" else result.toString() + " seconds"
     }
 
     class InputIsNotAValidNumberException(message: String) : IllegalArgumentException(message)

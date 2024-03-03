@@ -15,8 +15,7 @@ class Converter {
 
         val result = millisecondsInt / 1000
 
-        return result.toString() + " seconds"
-
+        return if (result == 1) result.toString() + " second" else result.toString() + " seconds"
     }
 
     class InputIsNotAValidNumberException(message: String) : IllegalArgumentException(message)

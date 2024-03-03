@@ -36,4 +36,9 @@ class ConverterTest {
         shouldThrow<Converter.InputIsNotAValidNumberException> {sut.convert("9223372036854775808")}
     }
 
+    @Test
+    fun `should return singular when second representation is 1`() {
+        sut.convert("1000") shouldBe "1 second"
+    }
+
 }

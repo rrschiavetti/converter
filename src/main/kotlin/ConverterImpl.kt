@@ -5,7 +5,8 @@
  */
 class ConverterImpl(
      private val enableMinutes: Boolean = false,
-     private val enableHours: Boolean = false
+     private val enableHours: Boolean = false,
+     private val ignoreZero: Boolean = false
 ): Converter {
 
     private companion object {
@@ -17,6 +18,10 @@ class ConverterImpl(
         const val SINGULAR_MINUTE = "minute"
         /** Text for plural MINUTE unit */
         const val PLURAL_MINUTE = "minutes"
+        /** Text for singular HOUR unit */
+        const val SINGULAR_HOUR = "hour"
+        /** Text for plural HOUR unit */
+        const val PLURAL_HOUR = "hours"
     }
 
     /**
@@ -55,8 +60,13 @@ class ConverterImpl(
      * @sample 10 -> "10 seconds"
      */
     private fun getOutputTimestamp(seconds: Long): String {
-        val unit = if (seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
-        return "$seconds $unit"
+        if (ignoreZero && seconds == 0L) {
+            return ""
+        } else{
+            val unit = if (seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
+            return "$seconds $unit"
+        }
+
     }
 
     /**
@@ -67,9 +77,17 @@ class ConverterImpl(
      * @return A string timestamp representing the seconds with appropriate units like "3 minutes 47 seconds"
      */
     private fun getOutputTimestamp(seconds: Long, minutes: Long): String {
+        val parts = mutableListOf<String>()
         val secondsUnit = if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
         val minutesUnit = if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE
-        return "$minutes $minutesUnit $seconds $secondsUnit"
+
+        if ((ignoreZero && minutes > 0L) || !ignoreZero) {
+            parts.add("$minutes $minutesUnit")
+        }
+        if ((ignoreZero && seconds > 0L )|| !ignoreZero) {
+            parts.add("$seconds $secondsUnit")
+        }
+        return parts.joinToString(" ").trim()
     }
 
     /**
@@ -81,10 +99,24 @@ class ConverterImpl(
      * @return A string timestamp representing the seconds with appropriate units like "2 hours 3 minutes 47 seconds"
      */
     private fun getOutputTimestamp(seconds: Long, minutes: Long, hours: Long): String {
+        val parts = mutableListOf<String>()
         val secondsUnit = if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
         val minutesUnit = if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE
-        val hoursUnit = if(hours ==1L) "hour" else "hours"
-        return "$hours $hoursUnit $minutes $minutesUnit $seconds $secondsUnit"
+        val hoursUnit = if(hours == 1L) SINGULAR_HOUR else PLURAL_HOUR
+
+        if ((ignoreZero && hours > 0L) || !ignoreZero) {
+            parts.add("$hours $hoursUnit")
+        }
+
+        if ((ignoreZero && minutes > 0L) || !ignoreZero) {
+            parts.add("$minutes $minutesUnit")
+        }
+
+        if ((ignoreZero && seconds > 0L )|| !ignoreZero) {
+            parts.add("$seconds $secondsUnit")
+        }
+
+        return parts.joinToString(" ").trim()
     }
 
     /**

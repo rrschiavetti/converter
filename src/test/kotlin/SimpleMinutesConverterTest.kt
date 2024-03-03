@@ -20,7 +20,9 @@ class SimpleMinutesConverterTest {
             Arguments.of("10000", "0 minutes 10 seconds"),
             Arguments.of("60000", "1 minute 0 seconds"),
             Arguments.of("60001", "1 minute 0 seconds"),
-            Arguments.of("47000", "0 minutes 47 seconds")
+            Arguments.of("47000", "0 minutes 47 seconds"),
+            Arguments.of("7200000", "120 minutes 0 seconds"),
+            Arguments.of("5620889", "93 minutes 40 seconds")
         )
     }
 

@@ -3,7 +3,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-class SimpleHoursConverter {
+class SimpleHoursConverterTest {
 
     @ParameterizedTest
     @MethodSource
@@ -23,7 +23,6 @@ class SimpleHoursConverter {
             Arguments.of("7200000", "2 hours 0 minutes 0 seconds"),
             Arguments.of("5620889", "1 hour 33 minutes 40 seconds"),
             Arguments.of("444509802", "123 hours 28 minutes 29 seconds")
-
         )
     }
 }

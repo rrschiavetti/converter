@@ -1,9 +1,11 @@
 /**
  * This class represents a Converter that converts milliseconds representation in String into seconds timestamp.
  * @param enableMinutes A flag to enable the conversion of milliseconds into minutes and seconds. Default is false.
+ * @param enableHours A flag to enable the conversion of milliseconds into hours, minutes and seconds. Default is false. Overrides `enableMinutes` parameter to true
  */
 class ConverterImpl(
-     private val enableMinutes: Boolean = false
+     private val enableMinutes: Boolean = false,
+     private val enableHours: Boolean = false
 ): Converter {
 
     private companion object {
@@ -31,7 +33,12 @@ class ConverterImpl(
         val millisecondsLong: Long = milliseconds.toLong()
         val totalSeconds = millisecondsLong / 1000
 
-        return if (enableMinutes) {
+        return if (enableHours) {
+            val hours = totalSeconds / 3600
+            val remainingMinutes = (totalSeconds % 3600) / 60
+            val remainingSeconds = (totalSeconds % 60) % 60
+            getOutputTimestamp(remainingSeconds, remainingMinutes, hours)
+        }else if (enableMinutes) {
             val minutes = totalSeconds /60
             val remainingSeconds = totalSeconds % 60
             getOutputTimestamp(remainingSeconds, minutes)
@@ -55,14 +62,29 @@ class ConverterImpl(
     /**
      * Builds the output string with appropriate units (seconds or second).
      *
-     * @param remainSeconds The number of seconds.
+     * @param seconds The number of seconds.
      * @param minutes The number of minutes.
      * @return A string timestamp representing the seconds with appropriate units like "3 minutes 47 seconds"
      */
-    private fun getOutputTimestamp(remainSeconds: Long, minutes: Long): String {
-        val secondsUnit = if(remainSeconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
+    private fun getOutputTimestamp(seconds: Long, minutes: Long): String {
+        val secondsUnit = if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
         val minutesUnit = if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE
-        return "$minutes $minutesUnit $remainSeconds $secondsUnit"
+        return "$minutes $minutesUnit $seconds $secondsUnit"
+    }
+
+    /**
+     * Builds the output string with appropriate units (seconds or second).
+     *
+     * @param seconds The number of seconds.
+     * @param minutes The number of minutes.
+     * @param hours The number of hours
+     * @return A string timestamp representing the seconds with appropriate units like "2 hours 3 minutes 47 seconds"
+     */
+    private fun getOutputTimestamp(seconds: Long, minutes: Long, hours: Long): String {
+        val secondsUnit = if(seconds == 1L) SINGULAR_SECOND else PLURAL_SECOND
+        val minutesUnit = if(minutes == 1L) SINGULAR_MINUTE else PLURAL_MINUTE
+        val hoursUnit = if(hours ==1L) "hour" else "hours"
+        return "$hours $hoursUnit $minutes $minutesUnit $seconds $secondsUnit"
     }
 
     /**

@@ -52,6 +52,6 @@ fun main() {
 ## Parameters
 
 - `enableMinutes`: A boolean flag to enable the conversion of milliseconds into minutes and seconds. Default is `false`.
-- `enableHours`: A boolean flag to enable the conversion of milliseconds into hours, minutes, and seconds. Default is `false`. Overrides the `enableMinutes` parameter to `true`.
+- `enableHours`: A boolean flag to enable the conversion of milliseconds into hours, minutes, and seconds. Default is `false`. If `true` it ignores `enableMinutes` flag.
 - `ignoreZero`: A boolean flag to ignore zero values in the output. Default is `false`.
 - `shortForm`: A boolean flag to use short forms of time units (e.g., "s" for seconds, "m" for minutes). Default is `false`.

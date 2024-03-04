@@ -6,7 +6,7 @@
 
     <groupId>com.millisecond.converter</groupId>
     <artifactId>converter-lib</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>Lib to convert a millisecond string representation in a custom timestamp seconds</description>
 
     <properties>

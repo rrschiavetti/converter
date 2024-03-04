@@ -1,3 +1,3 @@
-internal fun interface Converter {
+fun interface Converter {
     fun convert(milliseconds: String): String
 }
